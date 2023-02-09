@@ -1,0 +1,30 @@
+apply plugin: "org.sonarqube"
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "http://localhost:9000/"
+        property "sonar.projectKey", "Android_PipeLine"
+        property "sonar.projectName", "Android_PipeLne"
+        property "sonar.login", "a1001aeabd515cdaa3c9e3b87b8a2ddd6b39f387"
+        property "sonar.tests", "src/test/java"
+        property "sonar.test.inclusions", "**/*Test*/**"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.sources", "src/main/java"
+        property "sonar.issuesReport.html.enable", "true"
+        property "sonar.issuesReport.xml.enable", "true"
+        property "sonar.issuesReport.console.enable", "true"
+        property "sonar.exclusions", '**/*Test*/**,' +
+                'build/**' +
+                '*.json,' +
+                '**/*test*/**,' +
+                '**/.gradle/**,' +
+                '**/R.class'
+        property "sonar.java.coveragePlugin", "jacoco"
+//        property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/*.exec"
+        property "sonar.jacoco.reportPaths", "${project.buildDir}/test-results/**/*.xml"
+
+          property "sonar.junit.reportPaths", "**/test-results/**/*.xml"
+       property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/test-results/**/*.xml"
+        property "sonar.coverage.exclusions", "${excludes.join(', ')}"
+    }
+}
