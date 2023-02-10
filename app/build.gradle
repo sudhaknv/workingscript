@@ -1,0 +1,141 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'org.sonarqube'
+}
+//apply from: '../jacoco.gradle'
+//apply from: '../sonarqube.gradle'
+android {
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.rams.jenkinsapp"
+        minSdk 21
+        targetSdk 31
+        versionCode 13
+        versionName "3.3"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+        //setProperty("archivesBaseName", "Demo")
+    }
+    signingConfigs {
+         release {
+             storeFile  file("keystore.jks")
+             storePassword  'password'
+             keyAlias 'cicd'
+             keyPassword 'password'
+         }
+    }
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+    }
+    testOptions {
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+        animationsDisabled true
+        unitTests {
+            includeAndroidResources = true
+
+        }
+    }
+
+    buildFeatures {
+        compose true
+        viewBinding true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerVersion '1.5.21'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+
+    implementation 'com.google.android.play:core:1.10.2'
+
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+
+
+
+    //implementation project(':library')
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+}
+/*
+task teeee {
+
+    def data = readParams()
+    println("Dataaa       finaallllll"+data)
+}
+
+def readParams(){
+    println "inside uploadHockey"
+    File mapping = new File("hockeyapp-mapping.txt")
+    if (!mapping.exists()) {
+        println "mapping doesn't exist"
+        return []
+    }
+    Properties props = new Properties()
+    props.load(mapping.newDataInputStream())
+    for (Map.Entry<Object, Object> e : props.entrySet()) {
+        println("#&#&#&" + props)
+        String projectName = e.getKey() as String
+        println("&&&&&####" + projectName)
+        if (!projectName.isEmpty()) {
+            String value = e.getValue()
+            println("@#&@#&" + value)
+            if (!value.isEmpty()) {
+                def projectObj = new groovy.json.JsonSlurper().parseText(value)
+                println("@#!@#" + projectObj)
+                String hockeyAppId = projectObj["hockeyAppId"]
+                String apkName = projectObj["apk"]
+                String releaseId = projectObj["releaseId"]
+                String appcenterOrg = projectObj["appcenterOrg"]
+                String isAppCenter = projectObj["isAppCenter"]
+
+                println "HockeyApp ID = $hockeyAppId" + "apkName = $apkName" + "releaseID = $releaseId" + "appcenterOrg = $appcenterOrg" + "isAppCenter = $isAppCenter"
+
+                return  projectObj
+
+
+            }
+        }
+    }
+}*/
